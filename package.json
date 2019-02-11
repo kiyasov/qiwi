@@ -1,0 +1,26 @@
+{
+  "name": "@kiyasov/qiwi",
+  "version": "1.0.0",
+  "description": "Qiwi Api",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "./node_modules/.bin/babel src --out-dir lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kiyasov/qiwi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kiyasov/qiwi/issues"
+  },
+  "author": "Islam Kiyasov",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.3.0",
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6"
+  }
+}
