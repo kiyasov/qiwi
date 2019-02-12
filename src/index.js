@@ -1,4 +1,5 @@
 import axios from "axios";
+import _ from "lodash";
 
 export default class QiwiBot {
   constructor(props) {
@@ -34,6 +35,13 @@ export default class QiwiBot {
     }
   };
 
+  transactionsInfo = async transactionId => {
+    return await this.sendAuthenticatedRequest({
+      method: "get",
+      url: `/payment-history/v2/transactions/${transactionId}`
+    });
+  };
+
   accountInfo = async () => {
     return await this.sendAuthenticatedRequest({
       method: "get",
@@ -51,9 +59,17 @@ export default class QiwiBot {
   };
 
   processPayment = async ({ pattern_id, data }) => {
-    return await this.sendAuthenticatedRequest({
+    let response = await this.sendAuthenticatedRequest({
       url: `/sinap/api/v2/terms/${pattern_id}/payments`,
       data
     });
+
+    let { errorCode, error } = await this.transactionsInfo(response.transaction.id);
+
+    if (_.toInteger(errorCode) !== 0) {
+      throw new Error(error);
+    }
+
+    return response;
   };
 }
