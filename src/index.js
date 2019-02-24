@@ -6,7 +6,12 @@ export default class QiwiBot {
     this.props = props;
   }
 
-  sendAuthenticatedRequest = async ({ method = "post", url, data = {} }) => {
+  sendAuthenticatedRequest = async ({
+    method = "POST",
+    url,
+    data = {},
+    params = {}
+  }) => {
     let { accessToken } = this.props;
 
     try {
@@ -16,7 +21,8 @@ export default class QiwiBot {
         headers: {
           Authorization: "Bearer " + accessToken
         },
-        data
+        data,
+        params
       });
 
       return response;
@@ -35,16 +41,32 @@ export default class QiwiBot {
     }
   };
 
+  searchCheckout = async params => {
+    return await this.sendAuthenticatedRequest({
+      method: "GET",
+      url: `/checkout/api/bill/search`,
+      params: params
+    });
+  };
+
+  processCheckout = async data => {
+    return await this.sendAuthenticatedRequest({
+      method: "POST",
+      url: `/checkout/invoice/pay/wallet`,
+      data
+    });
+  };
+
   transactionsInfo = async transactionId => {
     return await this.sendAuthenticatedRequest({
-      method: "get",
+      method: "GET",
       url: `/payment-history/v2/transactions/${transactionId}`
     });
   };
 
   accountInfo = async () => {
     return await this.sendAuthenticatedRequest({
-      method: "get",
+      method: "GET",
       url: "/person-profile/v1/profile/current"
     });
   };
@@ -53,7 +75,7 @@ export default class QiwiBot {
     let { personId } = this.props;
 
     return await this.sendAuthenticatedRequest({
-      method: "get",
+      method: "GET",
       url: `/funding-sources/v2/persons/${personId}/accounts`
     });
   };
