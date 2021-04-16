@@ -1,5 +1,4 @@
 import axios from "axios";
-import _ from "lodash";
 
 export default class QiwiBot {
   constructor(props) {
@@ -52,7 +51,7 @@ export default class QiwiBot {
   processCheckout = async data => {
     return await this.sendAuthenticatedRequest({
       method: "POST",
-      url: `/checkout/invoice/pay/wallet`,
+      url: `/checkout-api/invoice/pay/wallet`,
       data
     });
   };
@@ -93,7 +92,7 @@ export default class QiwiBot {
         response.transaction.id
       );
 
-      if (_.toInteger(errorCode) !== 0) {
+      if (Number(errorCode) !== 0) {
         throw new Error(error);
       }
 
